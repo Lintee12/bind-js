@@ -5,22 +5,28 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{{pageTitle}}</title>
 		<meta name="description" content="bind-js frontend framework" />
+		<link rel="stylesheet" type="text/css" href="assets/reset.css" />
+		<link rel="stylesheet" type="text/css" href="/assets/bind.examples.theme.css" />
 	</head>
 	<body>
 		<div id="app">
-			<h1>{{welcomeMessage}}</h1>
-			<section id="rating-section">
-				<span>Likes: {{likeCount}}</span>
-				<button id="rate-btn-positive">like</button>
-				<button id="rate-btn-negative">dislike</button>
+			<section class="example-section">
+				<h1>{{welcomeMessage}}</h1>
+				<section class="rating-section">
+					<span style="color: green" id="rating-value">Likes: {{likeCount}}</span>
+					<div class="rating-buttons">
+						<button id="rate-btn-positive">like</button>
+						<button id="rate-btn-negative">dislike</button>
+					</div>
+				</section>
+				<div>
+					<input type="text" autocomplete="off" id="name-input" placeholder="Enter your name" />
+					<h2>{{greeting}}</h2>
+				</div>
 			</section>
-			<div>
-				<input id="name-input" placeholder="Enter your name" />
-				<h2>{{greeting}}</h2>
-			</div>
 		</div>
 		<script type="module">
-			import Bind from "./bind.min.js";
+			import Bind from "./bind.js";
 
 			let likeCount = 0;
 			let greeting = "";
@@ -29,26 +35,53 @@
 			bind1.render(
 				"body",
 				{
-					welcomeMessage: "bind-js prototype examples",
-					greeting: () => greeting,
-					likeCount: () => likeCount,
+					properties: {
+						welcomeMessage: "bind-js prototype examples",
+						greeting: () => greeting,
+						likeCount: () => likeCount,
+					},
+					methods: {
+						1: () => {
+							bind1.bind("#rate-btn-positive", "click", () => {
+								likeCount++;
+								if (likeCount < 0) {
+									bind1.getElement("#rating-value").style.color = "red";
+								} else {
+									bind1.getElement("#rating-value").style.color = "green";
+								}
+							});
+						},
+						2: () => {
+							bind1.bind("#rate-btn-negative", "click", () => {
+								likeCount--;
+								if (likeCount < 0) {
+									bind1.getElement("#rating-value").style.color = "red";
+								} else {
+									bind1.getElement("#rating-value").style.color = "green";
+								}
+							});
+						},
+						3: () => {
+							bind1.bind("#name-input", "input", (event) => {
+								if (event.target.value.length >= 1) {
+									greeting = "Hello " + event.target.value;
+								} else {
+									greeting = "";
+								}
+							});
+						},
+					},
 				},
 				() => {
-					document.querySelector("#rate-btn-positive").addEventListener("click", () => likeCount++);
-					document.querySelector("#rate-btn-negative").addEventListener("click", () => likeCount--);
-					document.querySelector("#name-input").addEventListener("input", (event) => {
-						if (event.target.value.length >= 1) {
-							greeting = "Hello " + event.target.value;
-						} else {
-							greeting = "";
-						}
-					});
+					console.log("test");
 				}
 			);
 
 			const bind2 = new Bind();
 			bind2.render("head", {
-				pageTitle: "bind-js playground",
+				properties: {
+					pageTitle: "bind-js playground",
+				},
 			});
 		</script>
 	</body>

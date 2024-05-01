@@ -1,0 +1,46 @@
+.example-section {
+	padding: 10px;
+	background-color: rgb(7, 2, 32);
+	margin: 10px;
+	border-radius: 10px;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	transition: all 1s ease-in-out;
+}
+
+.example-section {
+	button {
+		background-color: rgb(64, 0, 255);
+		border: 0;
+		outline: 0;
+		border-radius: 5px;
+		color: white;
+	}
+
+	input {
+		background-color: rgb(50, 50, 58);
+		border: 0;
+		outline: 0;
+		border-radius: 5px;
+		color: white;
+	}
+	input::placeholder {
+		color: rgba(255, 255, 255, 0.656);
+	}
+}
+
+.rating-section {
+	display: flex;
+	flex-direction: column;
+	width: fit-content;
+	gap: 5px;
+	font-size: 1.2rem;
+
+	.rating-buttons {
+		display: flex;
+		gap: 5px;
+		font-size: 1rem;
+	}
+}
