@@ -2,6 +2,7 @@
 class Bind {
 	constructor() {
 		this.rootElement = null;
+		this.properties = {};
 		this.initialDOM = [];
 		this.currentDOM = [];
 		this.lastUpdate = {};
@@ -35,18 +36,19 @@ class Bind {
 
 	render(root, { properties, methods }, callback) {
 		this.rootElement = document.querySelector(root);
+		this.properties = properties;
 		this.initialDOM = Array.from(this.rootElement.cloneNode(true).getElementsByTagName("*"));
 		this.currentDOM = Array.from(this.rootElement.getElementsByTagName("*"));
 
 		if (typeof callback === "function") callback();
 
-		this.updateDOM(properties);
+		this.updateDOM();
 
 		setInterval(() => {
-			for (let i = 0; i < this.getVarLength(properties); i++) {
-				const data = this.getVarData(properties, i);
+			for (let i = 0; i < this.getVarLength(this.properties); i++) {
+				const data = this.getVarData(this.properties, i);
 				if (this.lastUpdate[i] && this.lastUpdate[i].value !== data.value) {
-					this.updatePropertyInDOM(properties, data.name);
+					this.updatePropertyInDOM(data.name);
 				}
 				this.lastUpdate[i] = {
 					value: data.value,
@@ -63,10 +65,10 @@ class Bind {
 		}
 	}
 
-	updatePropertyInDOM(properties, property) {
+	updatePropertyInDOM(property) {
 		this.initialDOM.forEach((element, index) => {
-			for (let i = 0; i < this.getVarLength(properties); i++) {
-				const data = this.getVarData(properties, i);
+			for (let i = 0; i < this.getVarLength(this.properties); i++) {
+				const data = this.getVarData(this.properties, i);
 				if (element.innerHTML.includes(this.htmlValue(property))) {
 					if (element.innerHTML.includes(this.htmlValue(data.name)) && element.children.length === 0) {
 						this.currentDOM[index].innerHTML = element.innerHTML.replace(this.htmlValue(data.name), data.value);
@@ -76,10 +78,10 @@ class Bind {
 		});
 	}
 
-	updateDOM(properties) {
+	updateDOM() {
 		this.initialDOM.forEach((element, index) => {
-			for (let i = 0; i < this.getVarLength(properties); i++) {
-				const data = this.getVarData(properties, i);
+			for (let i = 0; i < this.getVarLength(this.properties); i++) {
+				const data = this.getVarData(this.properties, i);
 				if (element.innerHTML.includes(this.htmlValue(data.name)) && element.children.length === 0) {
 					this.currentDOM[index].innerHTML = element.innerHTML.replace(this.htmlValue(data.name), data.value);
 				}
