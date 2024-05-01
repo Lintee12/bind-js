@@ -1,5 +1,4 @@
 "use strict";
-
 class Bind {
 	constructor() {
 		this.initialDOM = [];
